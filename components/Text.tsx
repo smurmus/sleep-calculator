@@ -36,6 +36,10 @@ const styles = StyleSheet.create({
     fontSize: 16,
     lineHeight: 24,
   },
+  lg: {
+    fontSize: 48,
+    lineHeight: 56,
+  },
   sm: {
     fontSize: 14,
     lineHeight: 20,
