@@ -1,5 +1,5 @@
 import { View } from 'react-native';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import DropdownPicker, { ValueType } from 'react-native-dropdown-picker';
 import { useFormContext, Controller, ControllerProps } from 'react-hook-form';
 
@@ -10,6 +10,7 @@ type ControlledDropdownProps<T extends ValueType> = {
     label: string;
     value: T;
   }[];
+  initialValue?: T | null;
   placeholder?: string;
   label: string;
   id: string;
@@ -24,13 +25,20 @@ export function ControlledDropdown<T extends ValueType>({
   id,
   elevation = 10,
   name,
+  initialValue,
   ...otherProps
 }: ControlledDropdownProps<T>) {
-  const { control, setValue: setFieldValue, trigger, formState: { isValid } } = useFormContext();
+  const { control, setValue: setFieldValue, trigger, formState: { isDirty, isValid } } = useFormContext();
 
   const [open, setOpen] = useState(false);
-  const [currValue, setCurrValue] = useState(null);
+  const [currValue, setCurrValue] = useState(initialValue);
   const [items, setItems] = useState(options);
+
+  useEffect(() => {
+    if (isDirty || initialValue != null) {
+      trigger();
+    }
+  }, [isDirty, trigger]);
 
   return (
     <Controller
@@ -40,8 +48,9 @@ export function ControlledDropdown<T extends ValueType>({
         <View style={{ zIndex: elevation }}>
           <Text type="xs" style={{ fontWeight: 500, marginBottom: 4 }}>{label}</Text>
           <DropdownPicker
+            testID={`${id}-dropdown`}
             open={open}
-            value={currValue}
+            value={currValue as ValueType}
             items={items}
             setOpen={setOpen}
             onClose={() => {
@@ -62,7 +71,7 @@ export function ControlledDropdown<T extends ValueType>({
             }}
           />
           {fieldErrors[name] && !isValid &&
-            <Text type="xs" color="red" style={{ paddingTop: 4}}>
+            <Text type="xs" color="red" style={{ paddingTop: 4 }}>
               {fieldErrors[name]?.message as string}
             </Text>
           }

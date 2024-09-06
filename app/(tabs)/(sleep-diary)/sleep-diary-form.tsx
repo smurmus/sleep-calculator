@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { View, StyleSheet } from 'react-native';
 import { useFormContext } from 'react-hook-form'
 import * as z from 'zod';
@@ -15,10 +15,16 @@ const sleepHourOptions = (increment: number) => {
   for (let hour = 0; hour <= 24; hour++) {
     const totalHours = hour + (increment / 60);
     // Items: 0-24 hours, in 30-minute increments
-    hours.push({
-      label: `${totalHours} hours`,
-      value: totalHours,
-    });
+    hours.push(...[
+      {
+        label: `${hour} hours`,
+        value: hour,
+      },
+      {
+        label: `${totalHours} hours`,
+        value: totalHours,
+      },
+    ]);
   };
 
   return hours;
@@ -33,37 +39,41 @@ export const sleepDiarySchema = z.object({
   timeInBed: z.number().positive(),
   timeAsleep: z.number().positive(),
 })
-.refine(schema => {
-  return schema.timeInBed >= schema.timeAsleep;
-}, { message: 'Duration asleep cannot be longer than duration in bed.', path: ['timeAsleep']});
+  .refine(schema => {
+    return schema.timeInBed >= schema.timeAsleep;
+  }, { message: 'Duration asleep cannot be longer than duration in bed.', path: ['timeAsleep'] });
 
 export type SleepSchema = z.infer<typeof sleepDiarySchema>;
 
 const SleepDiaryForm = () => {
-  const { getValues, formState, watch } = useFormContext<SleepSchema>();
+  const { formState, watch } = useFormContext<SleepSchema>();
   const [sleepScore, setSleepScore] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
+  const { timeAsleep, timeInBed } = watch();
 
   const onSubmit = async (data: SleepSchema) => {
     console.log('Submitted', data);
-    const { timeAsleep, timeInBed } = watch();
+    const { timeAsleep, timeInBed } = data;
 
     if (formState.isValid) {
       const score = (100 * (timeAsleep / timeInBed)).toFixed();
       // try to "save" the score first
-      const result = await submitSleepScore({ sleepScore: score });
+      try {
 
-      // if it was successful, then sety the score text
-      if (result === 200) {
-        setSleepScore(score);
+        const result = await submitSleepScore({ sleepScore: score }, 'res=500');
+        
+        // if it was successful, then set the score text
+        if (result === 200) {
+          setSleepScore(score);
+        }
+      } catch (e) {
+        // otherwise, show an error of some kind
+        // @TODO: display error
+      } finally {
         setLoading(false);
       }
-
-      // otherwise, show an error of some kind
-      // @TODO: display error
     }
   };
-
 
   return (
     <View style={styles.container}>
@@ -74,12 +84,14 @@ const SleepDiaryForm = () => {
           options={sleepHourOptions(30)}
           name="timeInBed"
           elevation={20}
+          initialValue={timeInBed}
         />
         <ControlledDropdown<number>
           id="timeAsleep"
           label="Duration asleep"
           options={sleepHourOptions(30)}
           name="timeAsleep"
+          initialValue={timeAsleep}
         />
         <Button
           loading={loading}
@@ -87,7 +99,7 @@ const SleepDiaryForm = () => {
           title="Calculate"
           onPress={() => {
             setLoading(true);
-            onSubmit(getValues());
+            onSubmit({ timeAsleep, timeInBed });
           }}
         />
       </View>
