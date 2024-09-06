@@ -14,8 +14,8 @@ export const submitSleepScore = async (data?: Record<string, string>, args?: str
       throw new Error(`Response status: ${response.status}`);
     }
 
-    return response.status;
+    return 'success';
   } catch (e) {
-    console.error('ERR:', e);
+    return 'error';
   }
 };
