@@ -33,7 +33,7 @@ export default Text;
 
 const styles = StyleSheet.create({
   base: {
-    fontFamily: 'Quicksand',
+    fontFamily: 'Quicksand_500Medium',
   },
   default: {
     fontSize: 16,
@@ -43,6 +43,7 @@ const styles = StyleSheet.create({
     fontSize: 48,
     lineHeight: 56,
     fontWeight: 700,
+    fontFamily: 'Quicksand_600SemiBold',
   },
   md: {
     fontSize: 20,
