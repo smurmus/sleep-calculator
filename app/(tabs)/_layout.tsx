@@ -12,6 +12,7 @@ const BottomTabs = () => {
 
   return (
     <Tabs
+      sceneContainerStyle={{ backgroundColor: 'white' }}
       screenOptions={{
         tabBarActiveTintColor: activeColor,
         tabBarInactiveTintColor: inactiveColor,
