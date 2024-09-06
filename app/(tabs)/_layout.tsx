@@ -33,7 +33,7 @@ const BottomTabs = () => {
         }}
       />
       <Tabs.Screen
-        name="index"
+        name="(sleep-diary)"
         options={{
           title: 'Sleep Diary',
           tabBarTestID: 'sleep-diary-tab',
