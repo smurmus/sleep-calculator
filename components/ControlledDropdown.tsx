@@ -13,6 +13,8 @@ type ControlledDropdownProps<T extends ValueType> = {
   placeholder?: string;
   label: string;
   id: string;
+  /** @prop elevation to help appropriately set zIndex if there are multiple pickers */
+  elevation?: number;
 } & Omit<ControllerProps, 'render'>;
 
 export function ControlledDropdown<T extends ValueType>({
@@ -20,6 +22,7 @@ export function ControlledDropdown<T extends ValueType>({
   placeholder,
   label,
   id,
+  elevation = 10,
   ...otherProps
 }: ControlledDropdownProps<T>) {
   const { control, setValue } = useFormContext();
@@ -31,21 +34,29 @@ export function ControlledDropdown<T extends ValueType>({
     <Controller
       control={control}
       render={({ field: { onChange, value } }) => (
-        <View>
+        <View style={{ zIndex: elevation }}>
           <Text>{label}</Text>
           <DropdownPicker
             open={open}
             value={value}
             items={items}
             setOpen={setOpen}
-            onChangeValue={onChange}
+            onChangeValue={(e) => {
+              onChange(e);
+              setOpen(false);
+            }}
             setValue={(currVal) => setValue(otherProps.name, currVal)}
+            closeAfterSelecting
             setItems={setItems}
             placeholder={placeholder}
+            dropDownContainerStyle={{
+              backgroundColor: 'white',
+              zIndex: 10,
+            }}
           />
         </View>
       )}
       {...otherProps}
     />
   );
-}
+};
