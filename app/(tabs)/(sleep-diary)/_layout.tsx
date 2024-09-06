@@ -12,6 +12,7 @@ const SleepDiary = () => {
       timeAsleep: undefined,
     },
     resolver: zodResolver(sleepDiarySchema),
+    mode: 'onChange'
   });
 
   return (

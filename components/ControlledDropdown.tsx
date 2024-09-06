@@ -23,29 +23,36 @@ export function ControlledDropdown<T extends ValueType>({
   label,
   id,
   elevation = 10,
+  name,
   ...otherProps
 }: ControlledDropdownProps<T>) {
-  const { control, setValue } = useFormContext();
+  const { control, setValue: setFieldValue, trigger, formState: { isValid } } = useFormContext();
 
   const [open, setOpen] = useState(false);
+  const [currValue, setCurrValue] = useState(null);
   const [items, setItems] = useState(options);
 
   return (
     <Controller
+      name={name}
       control={control}
-      render={({ field: { onChange, value } }) => (
+      render={({ field: { onChange }, formState: { errors: fieldErrors } }) => (
         <View style={{ zIndex: elevation }}>
-          <Text>{label}</Text>
+          <Text type="xs" style={{ fontWeight: 500, marginBottom: 4 }}>{label}</Text>
           <DropdownPicker
             open={open}
-            value={value}
+            value={currValue}
             items={items}
             setOpen={setOpen}
-            onChangeValue={(e) => {
-              onChange(e);
+            onClose={() => {
+              trigger();
+            }}
+            onChangeValue={(v) => {
+              onChange(v);
+              setFieldValue(name, currValue, { shouldValidate: true });
               setOpen(false);
             }}
-            setValue={(currVal) => setValue(otherProps.name, currVal)}
+            setValue={setCurrValue}
             closeAfterSelecting
             setItems={setItems}
             placeholder={placeholder}
@@ -54,6 +61,11 @@ export function ControlledDropdown<T extends ValueType>({
               zIndex: 10,
             }}
           />
+          {fieldErrors[name] && !isValid &&
+            <Text type="xs" color="red" style={{ paddingTop: 4}}>
+              {fieldErrors[name]?.message as string}
+            </Text>
+          }
         </View>
       )}
       {...otherProps}

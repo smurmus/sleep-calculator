@@ -10,6 +10,7 @@ type Theme = DefaultThemeType & {
     text: string;
     orange: string;
     lightGrey: string;
+    red: string;
   },
 }
 
@@ -23,6 +24,7 @@ export const BIG_HEALTH_COLORS = {
   grey: 'rgb(129, 144, 161)',
   lightGrey: 'rgb(222, 228, 233)',
   orange: 'rgb(255, 143, 116)',
+  red: 'rgb(217, 57, 0)',
 }
 
 const BigHealthTheme: Theme = {

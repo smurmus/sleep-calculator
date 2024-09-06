@@ -1,5 +1,5 @@
 import React from 'react';
-import { TouchableOpacity, Button as NativeButton, ButtonProps as NativeButtonProps, StyleSheet } from 'react-native';
+import { TouchableOpacity, ButtonProps as NativeButtonProps, StyleSheet } from 'react-native';
 
 import { useThemeColor } from '@/hooks/useColor';
 import { BIG_HEALTH_COLORS } from '@/theming/BigHealthTheme';
@@ -8,6 +8,7 @@ import Text from './Text';
 
 type ButtonProps = NativeButtonProps & {
   color?: keyof typeof BIG_HEALTH_COLORS;
+  loading: boolean;
 };
 
 const Button = ({
@@ -15,6 +16,7 @@ const Button = ({
   onPress,
   color = 'orange',
   disabled,
+  loading = false,
   ...otherProps
 }: ButtonProps) => {
   const bgcolor = useThemeColor(color);
@@ -26,12 +28,12 @@ const Button = ({
       style={[
         { backgroundColor: bgcolor },
         styles.base,
-        disabled ? styles.disabled : {},
+        (disabled || loading) ? styles.disabled : {},
       ]}
       {...otherProps}
     >
-      <Text type="md" color={disabled ? 'grey' : 'text'}>
-        {title}
+      <Text type="md" color={(disabled || loading) ? 'grey' : 'text'}>
+        {loading ? 'Loading' : title}
       </Text>
     </TouchableOpacity>
   );
