@@ -1,3 +1,4 @@
+import React from 'react';
 import { View, StyleSheet } from 'react-native';
 import { useForm, FormProvider } from 'react-hook-form'
 

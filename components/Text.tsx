@@ -1,10 +1,12 @@
-import { useThemeColor } from '@/hooks/useColor';
-import { BIG_HEALTH_COLORS } from '@/theming/BigHealthTheme';
 import {
   Text as NativeText,
   type TextProps as NativeTextProps,
   StyleSheet
 } from 'react-native';
+import React from 'react';
+
+import { useThemeColor } from '@/hooks/useColor';
+import { BIG_HEALTH_COLORS } from '@/theming/BigHealthTheme';
 
 export type TextProps = NativeTextProps & {
   color?: keyof typeof BIG_HEALTH_COLORS;

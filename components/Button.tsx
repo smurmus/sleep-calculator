@@ -23,6 +23,8 @@ const Button = ({
 
   return (
     <TouchableOpacity
+      role="button"
+      accessibilityRole="button"
       onPress={onPress}
       accessibilityLabel={`${title} Button`}
       style={[

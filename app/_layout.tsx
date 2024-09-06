@@ -1,7 +1,8 @@
-import { Stack } from "expo-router";
+import React from 'react';
+import { Stack } from 'expo-router';
 import { ThemeProvider } from '@react-navigation/native';
 
-import BigHealthTheme from "@/theming/BigHealthTheme";
+import BigHealthTheme from '@/theming/BigHealthTheme';
 
 export default function RootLayout() {
   return (

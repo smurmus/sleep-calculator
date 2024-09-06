@@ -3,7 +3,7 @@ import { Tabs } from 'expo-router';
 
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 
-import { useThemeColor } from "@/hooks/useColor";
+import { useThemeColor } from '@/hooks/useColor';
 
 const BottomTabs = () => {
   const activeColor = useThemeColor('teal');
