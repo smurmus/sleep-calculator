@@ -26,11 +26,13 @@ describe('Mock endpoint', () => {
       `${MOCK_ENDPOINT_URL}/post?res=200`,
       {
         method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ sleepScore: '300' })
       }
     );
 
-    expect(res?.state).toBe('success');
+    expect(res?.state).toEqual('success');
+    expect(res?.result).toEqual({ user: { sleepScore: 40 }});
   });
 
   it('Throws error on failed submission', async () => {
@@ -53,6 +55,7 @@ describe('Mock endpoint', () => {
       `${MOCK_ENDPOINT_URL}/post?res=500`,
       {
         method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ sleepScore: '300' })
       }
     );

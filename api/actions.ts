@@ -1,11 +1,20 @@
 export const MOCK_ENDPOINT_URL = 'https://af665b3c-3e49-4c53-a477-475e964cc496.mock.pstmn.io';
 
-export const submitSleepScore = async (data?: Record<string, string>, args?: string) => {
+interface SleepScoreData {
+  sleepScore: string;
+}
+
+export const submitSleepScore = async (data: SleepScoreData, args?: string) => {
   try {
-    const response = await fetch(
-      `${MOCK_ENDPOINT_URL}/post?${args}`,
+    // ensure args are optional
+    const url = args ? `${MOCK_ENDPOINT_URL}/post?${args}` : `${MOCK_ENDPOINT_URL}/post`;
+
+    const response = await fetch(url,
       {
         method: "POST",
+        headers: {
+          "Content-Type": "application/json",  // Explicit content type
+        },
         body: JSON.stringify(data),
       },
     );
@@ -14,8 +23,12 @@ export const submitSleepScore = async (data?: Record<string, string>, args?: str
       throw new Error(`Response status: ${response.status}`);
     }
 
-    return { state: 'success'};
+    const result = await response.json();
+    return { state: 'success', result };  
   } catch (e) {
-    return { state: 'error' };
+    return { 
+      state: 'error',
+      message: e instanceof Error ? e.message : 'Unknown error'
+    };
   }
 };
