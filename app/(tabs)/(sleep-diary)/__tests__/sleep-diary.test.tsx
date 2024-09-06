@@ -37,6 +37,7 @@ describe('<SleepDiary />', () => {
 
   afterEach(() => {
     jest.clearAllMocks();
+    jest.resetAllMocks();
   });
 
   describe('Sleep calculator', () => {
@@ -55,8 +56,13 @@ describe('<SleepDiary />', () => {
         });
 
         const screen = setupTest({ timeAsleep: 4.5, timeInBed: 6 })
+        const button = screen.getByRole('button', { name: 'Calculate' });
 
-        await waitFor(() => userEvent.press(screen.getByRole('button', { name: 'Calculate' })));
+        await waitFor(() => {
+          expect(button.props.accessibilityState.disabled).toBeFalsy();
+          userEvent.press(button);
+          jest.advanceTimersByTime(500);
+        });
         await waitFor(() => expect(submitSleepScore).toHaveBeenCalledWith({ sleepScore: '75' }, 'res=200'));
 
         expect(screen.getByText('75')).toBeDefined();
@@ -69,7 +75,10 @@ describe('<SleepDiary />', () => {
 
         const screen = setupTest({ timeAsleep: 4.5, timeInBed: 2 });
 
-        // await waitFor(() => userEvent.press(screen.getByRole('button', { name: 'Calculate' })));
+        const button = screen.getByRole('button', { name: 'Calculate' });
+        expect(button.props.accessibilityState.disabled).toBeTruthy();
+
+        await waitFor(() => userEvent.press(button));
         await waitFor(() => expect(submitSleepScore).not.toHaveBeenCalled());
       });
 
@@ -80,9 +89,11 @@ describe('<SleepDiary />', () => {
         const screen = setupTest({ timeAsleep: 4.5, timeInBed: 6 });
 
         mockSubmitSleepScore({ sleepScore: 75 }, 'res=500');
+        const button = screen.getByRole('button', { name: 'Calculate' });
 
         await waitFor(() => {
-          userEvent.press(screen.getByRole('button', { name: 'Calculate' }))
+          expect(button.props.accessibilityState.disabled).toBeFalsy();
+          userEvent.press(button);
           jest.advanceTimersByTime(500);
         })
 
