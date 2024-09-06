@@ -11,7 +11,7 @@ export type TextProps = NativeTextProps & {
   type?: keyof typeof styles;
 }
 
-const Text = ({ color = 'text', type = 'default', ...rest }: TextProps) => {
+const Text = ({ color = 'text', type = 'default', style, ...rest }: TextProps) => {
   const textColor = useThemeColor(color);
 
   return (
@@ -20,6 +20,7 @@ const Text = ({ color = 'text', type = 'default', ...rest }: TextProps) => {
         { color: textColor },
         styles.base,
         styles[type],
+        style,
       ]}
       {...rest}
     />
@@ -39,6 +40,12 @@ const styles = StyleSheet.create({
   lg: {
     fontSize: 48,
     lineHeight: 56,
+    fontWeight: 700,
+  },
+  md: {
+    fontSize: 20,
+    lineHeight: 28,
+    fontWeight: 500,
   },
   sm: {
     fontSize: 14,
