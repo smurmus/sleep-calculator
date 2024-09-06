@@ -8,7 +8,7 @@ import Text from './Text';
 
 type ButtonProps = NativeButtonProps & {
   color?: keyof typeof BIG_HEALTH_COLORS;
-  loading: boolean;
+  loading?: boolean;
 };
 
 const Button = ({
@@ -24,7 +24,7 @@ const Button = ({
   return (
     <TouchableOpacity
       role="button"
-      disabled={disabled}
+      disabled={disabled || loading}
       accessibilityRole="button"
       onPress={onPress}
       accessibilityLabel={`${title} Button`}

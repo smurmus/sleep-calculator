@@ -3,12 +3,15 @@ import React, { useEffect, useState } from 'react';
 import DropdownPicker, { ValueType } from 'react-native-dropdown-picker';
 import { useFormContext, Controller, ControllerProps } from 'react-hook-form';
 
+import { useThemeColor } from '@/hooks/useColor';
+
 import Text from './Text';
 
 type ControlledDropdownProps<T extends ValueType> = {
   options: {
     label: string;
     value: T;
+    testID: string;
   }[];
   initialValue?: T | null;
   placeholder?: string;
@@ -29,6 +32,7 @@ export function ControlledDropdown<T extends ValueType>({
   ...otherProps
 }: ControlledDropdownProps<T>) {
   const { control, setValue: setFieldValue, trigger, formState: { isDirty, isValid } } = useFormContext();
+  const placeholderColor = useThemeColor('grey');
 
   const [open, setOpen] = useState(false);
   const [currValue, setCurrValue] = useState(initialValue);
@@ -68,6 +72,9 @@ export function ControlledDropdown<T extends ValueType>({
             dropDownContainerStyle={{
               backgroundColor: 'white',
               zIndex: 10,
+            }}
+            placeholderStyle={{
+              color: placeholderColor,
             }}
           />
           {fieldErrors[name] && !isValid &&

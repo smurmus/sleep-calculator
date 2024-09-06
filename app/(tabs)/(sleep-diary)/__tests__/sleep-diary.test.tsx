@@ -10,7 +10,6 @@ jest.mock('@/api/actions');
 
 const mockSubmitSleepScore = submitSleepScore as jest.Mock;
 
-
 type setupTestArgs = {
   timeAsleep?: number;
   timeInBed?: number;
@@ -32,7 +31,7 @@ const setupTest = (args: setupTestArgs) => {
 
 describe('<SleepDiary />', () => {
   beforeEach(() => {
-    jest.useFakeTimers()
+    jest.useFakeTimers();
   })
 
   afterEach(() => {

@@ -20,6 +20,7 @@ const sleepHourOptions = (increment: number) => {
     hours.push({
       label: `${hour} hours`,
       value: hour,
+      testID: `${hour}-hours-option`
     });
 
     // only add 30 minute increment for less than 24h
@@ -27,6 +28,7 @@ const sleepHourOptions = (increment: number) => {
       hours.push({
         label: `${totalHours} hours`,
         value: totalHours,
+        testID: `${totalHours}-hours-option`
       });
     }
   };
@@ -101,6 +103,7 @@ const SleepDiaryForm = () => {
           name="timeInBed"
           elevation={20}
           initialValue={timeInBed}
+          placeholder="Select total hours"
         />
         <ControlledDropdown<number>
           id="timeAsleep"
@@ -108,6 +111,7 @@ const SleepDiaryForm = () => {
           options={sleepHourOptions(30)}
           name="timeAsleep"
           initialValue={timeAsleep}
+          placeholder="Select total hours"
         />
         <Button
           loading={loading}
