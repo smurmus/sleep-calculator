@@ -9,6 +9,8 @@ import Text from '@/components/Text';
 import { BIG_HEALTH_COLORS } from '@/theming/BigHealthTheme';
 import { submitSleepScore } from '@/api/actions';
 
+const CALCULATION_ERROR_MESSAGE = 'Unable to calculate score. Please try again!';
+
 /** @param increment number in minutes */
 const sleepHourOptions = (increment: number) => {
   let hours = [];
@@ -36,8 +38,8 @@ export type SleepDiaryFormValues = {
 };
 
 export const sleepDiarySchema = z.object({
-  timeInBed: z.number().positive(),
-  timeAsleep: z.number().positive(),
+  timeInBed: z.number(),
+  timeAsleep: z.number(),
 })
   .refine(schema => {
     return schema.timeInBed >= schema.timeAsleep;
@@ -49,9 +51,10 @@ const SleepDiaryForm = () => {
   const { formState, watch } = useFormContext<SleepSchema>();
   const [sleepScore, setSleepScore] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
+  const [scoreErrorMessage, setScoreErrorMessage] = useState<string | undefined>(undefined);
   const { timeAsleep, timeInBed } = watch();
 
-  const onSubmit = async (data: SleepSchema) => {
+  const onSubmit = async (data: SleepSchema, args: string) => {
     console.log('Submitted', data);
     const { timeAsleep, timeInBed } = data;
 
@@ -59,16 +62,22 @@ const SleepDiaryForm = () => {
       const score = (100 * (timeAsleep / timeInBed)).toFixed();
       // try to "save" the score first
       try {
+        const result = await submitSleepScore({ sleepScore: score }, args);
 
-        const result = await submitSleepScore({ sleepScore: score }, 'res=500');
-        
-        // if it was successful, then set the score text
-        if (result === 200) {
+        if (result.state === 'success') {
+          // if it was successful, then set the score text
           setSleepScore(score);
+        } else if (result.state === 'error') {
+          // otherwise, show an error
+          setScoreErrorMessage(CALCULATION_ERROR_MESSAGE)
+          // clear message after a short time
+          setTimeout(() => setScoreErrorMessage(undefined), 3000);
         }
       } catch (e) {
-        // otherwise, show an error of some kind
-        // @TODO: display error
+        // @TODO: more complex error handling?
+        // wouldn't want to show internal error msg to user
+        console.log('Internal error: ', e);
+        setScoreErrorMessage(CALCULATION_ERROR_MESSAGE);
       } finally {
         setLoading(false);
       }
@@ -78,6 +87,11 @@ const SleepDiaryForm = () => {
   return (
     <View style={styles.container}>
       <View style={styles.formContainer}>
+        {scoreErrorMessage &&
+          <View style={styles.error}>
+            <Text type="sm" color="lightGrey">{scoreErrorMessage}</Text>
+          </View>
+        }
         <ControlledDropdown<number>
           id="timeInBed"
           label="Duration in bed"
@@ -99,7 +113,8 @@ const SleepDiaryForm = () => {
           title="Calculate"
           onPress={() => {
             setLoading(true);
-            onSubmit({ timeAsleep, timeInBed });
+            // @nts: change this to hit different endpoint
+            onSubmit({ timeAsleep, timeInBed }, 'res=200');
           }}
         />
       </View>
@@ -126,10 +141,18 @@ const styles = StyleSheet.create({
   formContainer: {
     gap: 24,
   },
+  error: {
+    marginBottom: 4,
+    paddingHorizontal: 12,
+    paddingVertical: 8,
+    backgroundColor: BIG_HEALTH_COLORS['red'],
+    borderRadius: 8,
+    justifyContent: 'center'
+  },
   score: {
     borderRadius: 24,
     height: 200,
-    width: 200,
+    width: '100%',
     padding: 12,
     backgroundColor: BIG_HEALTH_COLORS['lightBlue'],
     alignItems: 'center',

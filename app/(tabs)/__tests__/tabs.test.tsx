@@ -17,13 +17,12 @@ describe('<RootLayout />', () => {
   it('Navigates to Sleep Diary tab successfully', async () => {
     const { getByRole, getByTestId, getByText } = renderRouter();
 
-    const diaryTab = getByTestId('sleep-diary-tab');
-    userEvent.press(diaryTab);
-
     await waitFor(() => {
-      expect(getByText('Duration asleep'));
-      expect(getByText('Duration in bed'));
-      expect(getByRole('button', { name: 'Calculate' }));
-    })
+      userEvent.press(getByTestId('sleep-diary-tab'));
+    });
+
+    expect(getByText('Duration asleep'));
+    expect(getByText('Duration in bed'));
+    expect(getByRole('button', { name: 'Calculate' }));
   })
 });

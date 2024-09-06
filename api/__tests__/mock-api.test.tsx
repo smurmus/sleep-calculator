@@ -30,7 +30,7 @@ describe('Mock endpoint', () => {
       }
     );
 
-    expect(res).toBe('success');
+    expect(res?.state).toBe('success');
   });
 
   it('Throws error on failed submission', async () => {
@@ -57,6 +57,6 @@ describe('Mock endpoint', () => {
       }
     );
 
-    expect(res).toBe('error');
+    expect(res?.state).toBe('error');
   });
 });
