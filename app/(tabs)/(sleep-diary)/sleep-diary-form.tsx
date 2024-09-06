@@ -17,16 +17,18 @@ const sleepHourOptions = (increment: number) => {
   for (let hour = 0; hour <= 24; hour++) {
     const totalHours = hour + (increment / 60);
     // Items: 0-24 hours, in 30-minute increments
-    hours.push(...[
-      {
-        label: `${hour} hours`,
-        value: hour,
-      },
-      {
+    hours.push({
+      label: `${hour} hours`,
+      value: hour,
+    });
+
+    // only add 30 minute increment for less than 24h
+    if (hour < 24) {
+      hours.push({
         label: `${totalHours} hours`,
         value: totalHours,
-      },
-    ]);
+      });
+    }
   };
 
   return hours;
