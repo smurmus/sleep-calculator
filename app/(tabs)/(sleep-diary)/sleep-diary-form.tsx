@@ -6,7 +6,7 @@ import * as z from 'zod';
 import { ControlledDropdown } from '@/components/ControlledDropdown';
 import Button from '@/components/Button';
 import Text from '@/components/Text';
-import { BIG_HEALTH_COLORS } from '@/theming/BigHealthTheme';
+import { COLORS } from '@/theming/Theme';
 import { submitSleepScore } from '@/api/actions';
 
 const CALCULATION_ERROR_MESSAGE = 'Unable to calculate score. Please try again!';
@@ -151,7 +151,7 @@ const styles = StyleSheet.create({
     marginBottom: 4,
     paddingHorizontal: 12,
     paddingVertical: 8,
-    backgroundColor: BIG_HEALTH_COLORS['red'],
+    backgroundColor: COLORS['red'],
     borderRadius: 8,
     justifyContent: 'center'
   },
@@ -160,7 +160,7 @@ const styles = StyleSheet.create({
     height: 200,
     width: '100%',
     padding: 12,
-    backgroundColor: BIG_HEALTH_COLORS['lightBlue'],
+    backgroundColor: COLORS['lightBlue'],
     alignItems: 'center',
     justifyContent: 'center',
     zIndex: -1,

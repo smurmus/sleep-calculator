@@ -2,12 +2,12 @@ import React from 'react';
 import { TouchableOpacity, ButtonProps as NativeButtonProps, StyleSheet } from 'react-native';
 
 import { useThemeColor } from '@/hooks/useColor';
-import { BIG_HEALTH_COLORS } from '@/theming/BigHealthTheme';
+import { COLORS } from '@/theming/Theme';
 
 import Text from './Text';
 
 type ButtonProps = NativeButtonProps & {
-  color?: keyof typeof BIG_HEALTH_COLORS;
+  color?: keyof typeof COLORS;
   loading?: boolean;
 };
 
@@ -53,7 +53,7 @@ const styles = StyleSheet.create({
     paddingVertical: 8,
   },
   disabled: {
-    backgroundColor: BIG_HEALTH_COLORS['lightGrey'],
+    backgroundColor: COLORS['lightGrey'],
     pointerEvents: 'none',
   }
 });

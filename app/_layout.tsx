@@ -8,7 +8,7 @@ import {
   Quicksand_600SemiBold
 } from '@expo-google-fonts/quicksand';
 
-import BigHealthTheme from '@/theming/BigHealthTheme';
+import Theme from '@/theming/Theme';
 
 export default function RootLayout() {
   let [fontsLoaded] = useFonts({
@@ -22,7 +22,7 @@ export default function RootLayout() {
   }
 
   return (
-    <ThemeProvider value={BigHealthTheme}>
+    <ThemeProvider value={Theme}>
       <Stack>
         <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
       </Stack>

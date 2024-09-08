@@ -14,7 +14,7 @@ type Theme = DefaultThemeType & {
   },
 }
 
-export const BIG_HEALTH_COLORS = {
+export const COLORS = {
   lightTeal: 'rgb(107, 247, 232)',
   teal: 'rgb(129, 209, 223)',
   darkTeal: 'rgb(30, 88, 110)',
@@ -27,12 +27,12 @@ export const BIG_HEALTH_COLORS = {
   red: 'rgb(217, 57, 0)',
 }
 
-const BigHealthTheme: Theme = {
+const Theme: Theme = {
   dark: false,
   colors: {
     ...DefaultTheme.colors,
-    ...BIG_HEALTH_COLORS,
+    ...COLORS,
   },
 };
 
-export default BigHealthTheme;
+export default Theme;

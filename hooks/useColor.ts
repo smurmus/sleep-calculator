@@ -1,7 +1,7 @@
-import { BIG_HEALTH_COLORS } from '@/theming/BigHealthTheme';
+import { COLORS } from '@/theming/Theme';
 
 export function useThemeColor(
-  colorName: keyof typeof BIG_HEALTH_COLORS,
+  colorName: keyof typeof COLORS,
 ) {
-  return BIG_HEALTH_COLORS[colorName];
+  return COLORS[colorName];
 }

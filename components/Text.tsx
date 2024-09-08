@@ -6,10 +6,10 @@ import {
 import React from 'react';
 
 import { useThemeColor } from '@/hooks/useColor';
-import { BIG_HEALTH_COLORS } from '@/theming/BigHealthTheme';
+import { COLORS } from '@/theming/Theme';
 
 export type TextProps = NativeTextProps & {
-  color?: keyof typeof BIG_HEALTH_COLORS;
+  color?: keyof typeof COLORS;
   type?: keyof typeof styles;
 }
 
