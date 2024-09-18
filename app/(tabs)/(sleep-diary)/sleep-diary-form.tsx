@@ -12,7 +12,7 @@ import { submitSleepScore } from '@/api/actions';
 const CALCULATION_ERROR_MESSAGE = 'Unable to calculate score. Please try again!';
 
 /** @param increment number in minutes */
-const sleepHourOptions = (increment: number) => {
+const sleepHourOptions = (increment: number, limit?: number) => {
   let hours = [];
   for (let hour = 0; hour <= 24; hour++) {
     const totalHours = hour + (increment / 60);
@@ -20,7 +20,8 @@ const sleepHourOptions = (increment: number) => {
     hours.push({
       label: `${hour} hours`,
       value: hour,
-      testID: `${hour}-hours-option`
+      testID: `${hour}-hours-option`,
+      disabled: limit ? hour > limit : false,
     });
 
     // only add 30 minute increment for less than 24h
@@ -28,7 +29,8 @@ const sleepHourOptions = (increment: number) => {
       hours.push({
         label: `${totalHours} hours`,
         value: totalHours,
-        testID: `${totalHours}-hours-option`
+        testID: `${totalHours}-hours-option`,
+        disabled: limit ? totalHours > limit : false,
       });
     }
   };
@@ -108,7 +110,7 @@ const SleepDiaryForm = () => {
         <ControlledDropdown<number>
           id="timeAsleep"
           label="Duration asleep"
-          options={sleepHourOptions(30)}
+          options={sleepHourOptions(30, timeInBed)}
           name="timeAsleep"
           initialValue={timeAsleep}
           placeholder="Select total hours"
